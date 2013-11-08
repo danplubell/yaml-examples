@@ -85,10 +85,39 @@ yamlstring =
     ++ "        postal  : '48046'\n" 
     ++ "shipTo: *id001\n"     
 
+{-
+This function will parse the yamlstring into an Invoice instance.  If the string is parsed correctly then the Invoice object
+is shown.  If there is an exception then the exception is shown
+-}
+thisDoesParse::IO()
+thisDoesParse =do
+     let invoiceObj = (Yaml.decodeEither' $ BC.pack yamlstring)::Either Yaml.ParseException Invoice
+     case  invoiceObj of 
+        Left exception -> print exception
+        Right invoice' -> print invoice'
+
+{-
+This function will parse the yamlstring into an Invoice object, encode the result, and then attempt to decode the result.
+It will not parse because the invoice number looks like an integer to the Aeson parser
+-}
+thisDoesntParse::IO()
+thisDoesntParse=do
+    let invoiceObj = (Yaml.decodeEither' $ BC.pack yamlstring)::Either Yaml.ParseException Invoice
+    case  invoiceObj of 
+        Left exception -> print exception
+        Right invoice' -> do 
+            print invoice'
+            let invoiceObj' = (Yaml.decodeEither' $ Yaml.encode invoice')::Either Yaml.ParseException Invoice
+            case invoiceObj' of
+                Left exception -> print exception
+                Right invoice'' -> print invoice''
 main::IO()
 main = do
-    let obj = (Yaml.decodeEither' $ BC.pack yamlstring)::Either Yaml.ParseException Invoice
-    case obj of 
-        Left p -> print p
-        Right a -> print a
-        
+    thisDoesParse
+    thisDoesntParse
+    
+            
+            
+            
+    
+       
