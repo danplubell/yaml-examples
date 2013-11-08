@@ -10,27 +10,14 @@ executable yaml-example
   build-depends:   base >= 4
   ghc-options:     -Wall
 
-executable syck-example
-  hs-source-dirs:  src
-  main-is:         SyckYamlExample.hs
-  build-depends:   base >= 4
-  ghc-options:     -Wall
-
-executable yaml-light-example
-  hs-source-dirs:  src
-  main-is:         YamlLightExample.hs
-  build-depends:   base >= 4
-  ghc-options:     -Wall
 
 library 
   build-depends:   
                    base >= 4,
-                   yaml,
+                   yaml >= 0.8.5.1,
                    bytestring,
                    aeson,
-                   text,
-                   HsSyck,
-                   yaml-light
+                   text
   hs-source-dirs:  src
   ghc-options:     -Wall
 

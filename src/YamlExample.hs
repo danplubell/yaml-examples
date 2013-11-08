@@ -1,5 +1,5 @@
 {-
-Example of decoding a yaml string in memory
+Example of using Data.Yaml to decode and encode an ADT from a string to an object.
 -}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
@@ -17,7 +17,7 @@ data Product = Product
     , price::Double
   } deriving (Eq,Show)
   
-deriveJSON id ''Product -- use the aeson templates to derive the ToJSON and the FromJSON
+deriveJSON id ''Product -- use the Aeson templates to derive the ToJSON and the FromJSON instances
 
 data Address = Address
   {
@@ -93,12 +93,14 @@ thisDoesParse::IO()
 thisDoesParse =do
      let invoiceObj = (Yaml.decodeEither' $ BC.pack yamlstring)::Either Yaml.ParseException Invoice
      case  invoiceObj of 
-        Left exception -> print exception
+        Left exception -> putStrLn $ "Exception: " ++  show exception
         Right invoice' -> print invoice'
 
 {-
 This function will parse the yamlstring into an Invoice object, encode the result, and then attempt to decode the result.
-It will not parse because the invoice number looks like an integer to the Aeson parser
+It will not parse because the invoice number looks like an integer to the Aeson parser is expecting an Text value but the data looks like
+a Number.  The decode method will process an all digit string if the value has quotes.  But, when the object is encoded the digit string is not
+quoted.  The next attempt to decode the string will fail because of the Text/Number ambiguity.
 -}
 thisDoesntParse::IO()
 thisDoesntParse=do
@@ -106,10 +108,9 @@ thisDoesntParse=do
     case  invoiceObj of 
         Left exception -> print exception
         Right invoice' -> do 
-            print invoice'
             let invoiceObj' = (Yaml.decodeEither' $ Yaml.encode invoice')::Either Yaml.ParseException Invoice
             case invoiceObj' of
-                Left exception -> print exception
+                Left exception -> putStrLn  $ "Exception: " ++ show exception 
                 Right invoice'' -> print invoice''
 main::IO()
 main = do
