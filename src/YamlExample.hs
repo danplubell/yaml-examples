@@ -3,10 +3,10 @@ Example of using Data.Yaml to decode and encode an ADT from a string to an objec
 -}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
-import Data.Yaml as Yaml
-import qualified Data.Text as T
-import Data.Aeson.TH
-import qualified Data.ByteString.Char8 as BC 
+import              Data.Yaml as Yaml
+import qualified    Data.Text as T
+import              Data.Aeson.TH
+import qualified    Data.ByteString.Char8 as BC 
 
 --Define the ADTs
 data Product = Product
