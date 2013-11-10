@@ -2,7 +2,7 @@ name:           yaml-examples
 version:        0.1
 cabal-version:  >=1.2
 build-type:     Simple
-author:         cerdep
+author:         Dan Plubell
 
 executable yaml-example
   hs-source-dirs:  src
